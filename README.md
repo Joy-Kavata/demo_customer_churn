@@ -1,7 +1,7 @@
 ### Telco Customer Churn Prediction & Risk Segmentation
 A machine learning application designed to quantify customer retention risk and predict churn probabilities using Random Forest and Logistic Regression models.
 
-Live Interactive App: 
+Live Interactive App: [View Streamlit app](https://democustomerchurn-uvktrxasjdegcjvehphisa.streamlit.app/)
 
 ## Project Overview
 Data Processing & EDA: Cleaned customer demographics, contract types, and service usage features.
