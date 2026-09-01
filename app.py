@@ -48,8 +48,8 @@ input_data = pd.DataFrame({
 # Make prediction
 if st.button("🚀 Calculate Churn Risk", type="primary"):
 # Scale numerical features if needed by your scaler, or predict directly
-input_df = input_data.copy()
-if hasattr(model, 'feature_names_in_'):
+ input_df = input_data.copy()
+  if hasattr(model, 'feature_names_in_'):
     for col not in input_df.columns:
         input_df[col] = 0
         input_df = input_df[model.feature_names_in_]
