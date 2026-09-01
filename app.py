@@ -50,7 +50,7 @@ if all(col in input_data.columns for col in num_cols):
     input_data[num_cols] = scaler.transform(input_data[num_cols])
 
 # Make prediction
-if st.button("🚀 Calculate Churn Risk", type="primary"):
+if st.button("Calculate Churn Risk", type="primary"):
     input_df = input_data.copy()
     
     # Align feature columns with model training schema
@@ -96,7 +96,7 @@ if st.button("🚀 Calculate Churn Risk", type="primary"):
 
     # Feature Importance visual
     st.markdown("---")
-    st.write("### 📊 Top Feature Drivers")
+    st.write("### Top Feature Drivers")
 
     if hasattr(model, 'feature_importances_'):
         importances = pd.DataFrame({
