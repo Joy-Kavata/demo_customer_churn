@@ -31,7 +31,6 @@ internet = st.sidebar.selectbox("Internet Service", ["DSL", "Fiber optic", "No"]
 payment = st.sidebar.selectbox("Payment Method", ["Electronic check", "Mailed check", "Bank transfer (automatic)", "Credit card (automatic)"])
 
 # Prepare input data matching model encoding
-# Adjust column encoding names below if your specific model uses one-hot encoding columns
 input_data = pd.DataFrame({
     'tenure': [tenure],
     'MonthlyCharges': [monthly_charges],
@@ -45,15 +44,24 @@ input_data = pd.DataFrame({
     'PaymentMethod_Mailed check': [1 if payment == "Mailed check" else 0]
 })
 
+# Scale numerical columns if needed
+num_cols = ['tenure', 'MonthlyCharges', 'TotalCharges']
+if all(col in input_data.columns for col in num_cols):
+    input_data[num_cols] = scaler.transform(input_data[num_cols])
+
 # Make prediction
 if st.button("🚀 Calculate Churn Risk", type="primary"):
-# Scale numerical features if needed by your scaler, or predict directly
- input_df = input_data.copy()
-  if hasattr(model, 'feature_names_in_'):
-    for col not in input_df.columns:
-        input_df[col] = 0
+    input_df = input_data.copy()
+    
+    # Align feature columns with model training schema
+    if hasattr(model, 'feature_names_in_'):
+        for col in model.feature_names_in_:
+            if col not in input_df.columns:
+                input_df[col] = 0
         input_df = input_df[model.feature_names_in_]
-        churn_prob = model.predict_proba(input_df)[0][1]
+
+    # Predict probability
+    churn_prob = model.predict_proba(input_df)[0][1]
     churn_percentage = round(churn_prob * 100, 1)
 
     # Layout into columns
@@ -96,8 +104,14 @@ if st.button("🚀 Calculate Churn Risk", type="primary"):
             'Importance': model.feature_importances_
         }).sort_values('Importance', ascending=True)
 
-        fig = px.bar(importances, x='Importance', y='Feature', orientation='h',
-                     title="Model Feature Weighting", color='Importance',
-                     color_continuous_scale='Blues')
+        fig = px.bar(
+            importances, 
+            x='Importance', 
+            y='Feature', 
+            orientation='h',
+            title="Model Feature Weighting", 
+            color='Importance',
+            color_continuous_scale='Blues'
+        )
         fig.update_layout(height=350, margin=dict(l=0, r=0, t=30, b=0))
         st.plotly_chart(fig, use_container_width=True)
