@@ -48,7 +48,12 @@ input_data = pd.DataFrame({
 # Make prediction
 if st.button("🚀 Calculate Churn Risk", type="primary"):
     # Scale numerical features if needed by your scaler, or predict directly
-    churn_prob = model.predict_proba(input_data)[0][1]
+input_df = input_data.copy()
+if hasattr(model, 'feature_names_in_'):
+    for col not in input_df.columns:
+        input_df[col] = 0
+        input_df = input_df[model.feature_names_in_]
+        churn_prob = model.predict_proba(input_df)[0][1]
     churn_percentage = round(churn_prob * 100, 1)
 
     # Layout into columns
@@ -87,7 +92,7 @@ if st.button("🚀 Calculate Churn Risk", type="primary"):
 
     if hasattr(model, 'feature_importances_'):
         importances = pd.DataFrame({
-            'Feature': input_data.columns,
+            'Feature': input_df.columns,
             'Importance': model.feature_importances_
         }).sort_values('Importance', ascending=True)
 
