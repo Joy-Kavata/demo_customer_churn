@@ -16,12 +16,12 @@ def load_assets():
 model, scaler = load_assets()
 
 # Header
-st.title("🔮 Telco Customer Churn Predictor")
+st.title("Telco Customer Churn Predictor Demo")
 st.markdown("Adjust customer profile attributes on the left to evaluate real-time churn probabilities and risk levels.")
 st.markdown("---")
 
 # Sidebar inputs
-st.sidebar.header("📋 Customer Profile")
+st.sidebar.header("Customer Profile")
 tenure = st.sidebar.slider("Tenure (Months)", 0, 72, 12)
 monthly_charges = st.sidebar.number_input("Monthly Charges ($)", value=65.00, step=5.0)
 total_charges = st.sidebar.number_input("Total Charges ($)", value=780.00, step=50.0)
@@ -47,7 +47,7 @@ input_data = pd.DataFrame({
 
 # Make prediction
 if st.button("🚀 Calculate Churn Risk", type="primary"):
-    # Scale numerical features if needed by your scaler, or predict directly
+# Scale numerical features if needed by your scaler, or predict directly
 input_df = input_data.copy()
 if hasattr(model, 'feature_names_in_'):
     for col not in input_df.columns:
